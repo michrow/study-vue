@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>v-*</title>
+		<script src="js/vue.js" type="text/javascript" charset="utf-8"></script>
+	
+	</head>
+	<body>
+		<div id="app">
+			<div id='top'>
+				<input v-model="cinput" placeholder="请输入任务" @keyup.enter="add"/>
+			</div>
+		
+	 		<div id='man'>
+				<ul>
+					<li v-for="(item,index) in tasklist">
+						<div @mouseover="showr" @mouseleave="nshowr">
+							<span>{{index+1}}</span>
+							<label>{{item}}</label>
+							<button @click="remove(index)" v-show="isShow">-</button>
+						</div>
+					</li>
+				</ul>
+			</div>
+			<div id="buttom" v-show="tasklist.length!=0">
+				<span><strong>{{tasklist.length}} items</strong></span>
+				<button @click="clear">clear</button>
+			</div>
+			
+		</div>
+		
+		<script>
+			var app = new Vue({
+				el: '#app',
+				data: {
+					cinput:'',
+					tasklist:['衣','食'],
+					isShow:false
+				},
+				methods:{
+					add:function(){
+						this.tasklist.push(this.cinput)
+						this.cinput=''
+					},
+					remove:function(index){
+						this.tasklist.splice(index,1)
+					},
+					clear:function(){
+						this.tasklist = []
+					},
+					showr:function(){
+						this.isShow=true
+					},
+					nshowr:function(){
+						this.isShow=false
+					}
+				}
+			})			
+			
+		</script>
+</html>
