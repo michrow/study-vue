@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<script src="js/vue.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div id="app">
+			<input type="text" v-model="name" />
+			<my-component :my-name='name' :my-person='person'></my-component>
+		</div>
+		
+		<template id="myComponent">
+			<div>
+				<input type="text" v-model="myName" />
+				<p v-text="myPerson.age"></p>
+			</div>
+		</template>
+		<script>
+			new Vue({
+				el:'#app',
+				data:{
+					name:'wxh',
+					person:{
+						name:'wxh',
+						age:'26'
+					}
+				},
+				components:{
+					"my-component":{
+						template:'#myComponent',
+						props:{
+							myName: String,
+							myPerson: Object
+						}
+					}
+				}
+			})
+		</script>
+	</body>
+</html>

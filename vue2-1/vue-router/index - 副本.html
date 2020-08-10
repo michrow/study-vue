@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title></title>
+		<script src="https://unpkg.com/vue/dist/vue.js"></script>
+		<script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+	</head>
+	<body>
+		<div id="app">
+			<h1>Route props</h1>
+			<ul>
+			 <li><router-link to="/">/</router-link></li>
+			 <li><router-link to="/hello/you">/hello/you</router-link></li>
+			 <li><router-link to="/static">/static</router-link></li>
+			 <li><router-link to="/dynamic/1">/dynamic/1</router-link></li>
+			 <li><router-link to="/attrs">/attrs</router-link></li>
+			</ul>
+		  <!-- 路由出口 -->
+		  <!-- 路由匹配到的组件将渲染在这里 -->
+		  <router-view></router-view>
+		</div>
+		
+		<script>
+			const Hello = {
+				props:['name'],
+				template:'<div>Hello{{$route.params}} 和 {{this.name}}</div>'
+			}
+			const routes = [
+			  { path: '/', component: Hello },
+			  { path: '/hello/:name', component: Hello,props:true },
+			  { path: '/static', component: Hello,props:{name:'world'} },
+			  { path: '/dynamic/:year', component: Hello,props:dynamicPropsFn },
+			  { path: '/attrs', component: Hello,props:{name:'attrs'} }
+			]
+			
+			function dynamicPropsFn(route){
+				return {
+					name:(new Date().getFullYear()+parseInt(route.params.years))+'!'
+				}
+			}
+			
+			// 3. 创建 router 实例，然后传 `routes` 配置
+			// 你还可以传别的配置参数, 不过先这么简单着吧。
+			const router = new VueRouter({
+			  mode:history,
+			  routes // (缩写) 相当于 routes: routes
+			})
+			
+			// 4. 创建和挂载根实例。
+			// 记得要通过 router 配置参数注入路由，
+			// 从而让整个应用都有路由功能
+			const app = new Vue({
+			  router
+			}).$mount('#app')
+
+		</script>
+	</body>
+</html>

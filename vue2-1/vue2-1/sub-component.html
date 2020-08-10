@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<script src="js/vue.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<div id="app">
+			<table>
+				<tr>
+					<th colspan="3">父组件数据</th>
+				</tr>
+				<tr>
+					<td>名字</td>
+					<td>{{name}}</td>
+					<td><input type="text" v-model="name" /></td>
+				</tr>
+				<tr>
+					<td>年龄</td>
+					<td>{{age}}</td>
+					<td><input type="text" v-model="age" /></td>
+				</tr>
+
+			</table>
+			<!--通过v-bind:my-name="name"实现父子组件的单向数据绑定，通过v-on:change-nam="setName" 自定义事件实现子向父的数据传递-->
+			<my-component :my-name="name" :my-age="age" :my-person="person" @change-name="setName" @change-age="setAge"></my-component>
+		</div>
+		<template id="myComponent">
+			<table>
+				<tr>
+					<th colspan="3">子组件数据</th>
+				</tr>
+				<tr>
+					<td>名字</td>
+					<td>{{myName}}</td>
+					<td><input type="text" v-model="myName" /></td>
+				</tr>
+				<tr>
+					<td>年龄</td>
+					<td>{{myAge}}</td>
+					<td><input type="text" v-model="myAge" /></td>
+				</tr>
+				<tr>
+					<td>{{myPerson.name}}</td>
+					<td>{{myPerson.age}}</td>
+				</tr>
+			</table>
+		</template>
+		<script>
+			var vm = new Vue({
+				el: "#app",
+				data: {
+					name: "小明",
+					age: 24,
+					person:{
+						name:'wxh',
+						age:'26'
+					}
+				},
+				components: {
+					'my-component': {
+						template: "#myComponent",
+						// props: ["myName", "myAge","myperson"],
+						props:{
+							myName:String,
+							myAge:Number,
+							myPerson:Object
+						},
+						watch: { //监听外部对props属性myName,myAge的变更
+							myName: function(val) {
+								this.$emit("change-name", val) //组件内对myName变更后向外部发送事件通知
+							},
+							myAge: function(val) {
+								this.$emit("change-age", val) //组件内对myAge变更后向外部发送事件通知
+							}
+						}
+					}
+				},
+				methods: {
+					setName: function(val) {
+						this.name = val; //外层调用组件方法注册变更方法，将组件内的数据变更，同步到组件外的数据状态中
+					},
+					setAge: function(val) {
+						this.age = val;
+					}
+				}
+			})
+		</script>
+	</body>
+</html>
